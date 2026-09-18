@@ -17,9 +17,10 @@ def add_ones(X: FloatArray) -> FloatArray:
 def fit(X: FloatArray, y: FloatArray) -> FloatArray:
     """Return analytic least-squares weights, including the intercept."""
     # TODO: Add the intercept column and implement (X^T X)^+ X^T y.
+    X = add_ones(X)
     xt = np.transpose(X)
-    pseudoinverse = np.linalg.pinv(np.dot(xt, X))
-    return pseudoinverse + (np.dot(xt,y))
+    pseudoinverse = np.linalg.pinv(np.matmul(xt, X))
+    return pseudoinverse + (np.matmul(xt,y))
 
 
 def predict(X: FloatArray, w: FloatArray) -> FloatArray:
