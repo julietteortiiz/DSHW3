@@ -38,6 +38,7 @@ class TestLinearRegression(unittest.TestCase):
         """The analytic solution should recover a simple exact line."""
         X = np.array([[-2.0], [-1.0], [0.0], [1.0], [2.0]])
         y = 3.0 + 2.5 * X[:, 0]
+        print("Y in test afpc: " + str(y))
 
         weights = fit(X, y)
 

@@ -42,7 +42,12 @@ def load_data(filename: Path) -> Tuple[FloatArray, FloatArray]:
 def normalize(values: FloatArray) -> Tuple[FloatArray, FloatArray, FloatArray]:
     """Return normalized values, their column means, and standard deviations."""
     # TODO: Compute means and standard deviations along axis 0.
-    raise NotImplementedError
+    X = values
+    X_mean = X.mean(axis = 0)
+    X_std = X.std(axis=0)
+    X_normalized = (X - X_mean) / X_std
+    return X_normalized, X_mean, X_std
+
 
 
 def plot_cost_history(cost_history: Sequence[float], output_path: Path) -> None:
@@ -59,6 +64,13 @@ def main() -> None:
     # Normalize the housing data before fitting either model. You may choose a
     # clear, documented way to determine when normalization is appropriate.
     # TODO: Normalize X and y for the USA Housing experiment.
+    
+    normalized_X = normalize(X)
+    normalized_y = normalize(y)
+
+    X = normalized_X[0]
+    y = normalized_y[0]
+
 
     analytic_weights = fit(X, y)
     analytic_cost = cost(X, y, analytic_weights)
