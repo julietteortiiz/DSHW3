@@ -83,7 +83,7 @@ def fit_SGD_with_history(
 
         if diff < eps:
             costs.append(c)
-            return w, costs, i
+            return w, costs[1:], i
             
         costs.append(c)
                 

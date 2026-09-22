@@ -53,7 +53,17 @@ def normalize(values: FloatArray) -> Tuple[FloatArray, FloatArray, FloatArray]:
 def plot_cost_history(cost_history: Sequence[float], output_path: Path) -> None:
     """Save a labeled plot of cost versus epoch."""
     # TODO: Create the parent directory and save the required figure.
-    raise NotImplementedError
+    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots()
+    x = np.linspace(start = 1, stop = len(cost_history), num = len(cost_history))
+    print(len(cost_history))
+    print(cost_history)
+    ax.plot(x, cost_history)
+    ax.set(xlabel='epochs', ylabel='cost J(w)',
+       title='SGD Cost History')
+    ax.grid()
+    fig.savefig(output_path)
+
 
 
 def main() -> None:
