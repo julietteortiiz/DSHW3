@@ -83,12 +83,12 @@ def fit_SGD_with_history(
 
         if diff < eps:
             costs.append(c)
-            return w, costs[1:], i
+            return w, costs[1:], i + 1
             
         costs.append(c)
                 
 
     # 4. Return the final weights, cost history, and completed epoch count.
-    return w, costs, tmax
+    return w, costs[1:], tmax
     
     
