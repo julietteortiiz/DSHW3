@@ -48,6 +48,7 @@ class TestLinearRegression(unittest.TestCase):
             "fit() should return the intercept followed by one feature weight.",
         )
         self.assertTrue(
+            #np all close to check if two arrays are equal
             np.allclose(weights, [3.0, 2.5], atol=1e-8),
             "fit() did not recover the expected intercept and slope.",
         )

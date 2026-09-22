@@ -9,51 +9,29 @@ FloatArray = NDArray[np.float64]
 
 def add_ones(X: FloatArray) -> FloatArray:
     """Return X with a leading intercept column of ones."""
-    #print("\nAdd Ones Testing\n")
-    #print("X input: " + str(X) + "\n")
     s = X.shape
-    #print("X shape: " + str(s) + "\n")
-    ones_col = np.ones((s[0], 1), dtype = float)
-    #print("ones col shape" + str(ones_col.shape) )
-    new_x = np.concatenate((ones_col, X), axis = 1)
-    #print("X with ones: " + str(new_x) + "\n")
+    ones_vector = np.ones((s[0], 1), dtype = float)
+    new_x = np.concatenate((ones_vector, X), axis = 1)
     return new_x
 
 
 def fit(X: FloatArray, y: FloatArray) -> FloatArray:
     """Return analytic least-squares weights, including the intercept."""
-    #print("\nTesting fit\n")
-    #print("X initially: " + str(X) + "\n")
     X = add_ones(X)
     xt = np.transpose(X)
-    #print("xt: " + str(xt) + "\n")
-    #print("y " + str(y) + "y shape: " + str(y.shape))
-    pseudoinverse = np.linalg.pinv(np.matmul(xt, X))
-    w = np.matmul(pseudoinverse, (np.matmul(xt,y)))
-    #print("w: " + str(w) + "w shape: " + str(w.shape) + "\n")
-    return w
+    return np.matmul(np.linalg.pinv(np.matmul(xt, X)), (np.matmul(xt,y)))
 
 
 def predict(X: FloatArray, w: FloatArray) -> FloatArray:
     """Return one prediction per row of X using weights w."""
-    #print("\n Testing Predict \n")
-    #print("w: " + str(w) + "\n")
-    X_ones = add_ones(X)
-    #print("X: " + str(X_ones) + "shape" + str(X_ones.shape)+ "\n")
-    y_hat = np.matmul(X_ones, w)
-    #print("y_hat"  + str(y_hat) + "shape" + str(y_hat.shape)+ "\n")
-    return y_hat
+    return np.matmul(add_ones(X), w)
 
 
 def cost(X: FloatArray, y: FloatArray, w: FloatArray) -> float:
     """Return one-half the sum of squared prediction errors."""
-    # TODO: Use predict() and vectorized NumPy operations.
     y_hat = predict(X, w)
-    a = np.subtract(y, y_hat) 
-    b = a ** 2
-    c = float(b.sum())
-    d = 1/2 * c
-    return d
+    b = (y - y_hat) ** 2
+    return 1/2 * float(b.sum())
 
 
 def fit_SGD(
@@ -69,6 +47,8 @@ def fit_SGD(
     epochs. One loop over epochs and one nested loop over examples are allowed.
     """
     weights, _, _ = fit_SGD_with_history(X, y, alpha, eps, tmax)
+    print("final weights: " + str(weights))
+    print("should be [1.25, -0.75]")
     return weights
 
 
@@ -80,9 +60,35 @@ def fit_SGD_with_history(
     tmax: int = 10_000,
 ) -> Tuple[FloatArray, List[float], int]:
     """Return SGD weights, the cost after every epoch, and epoch count."""
-    # TODO:
     # 1. Add the intercept column and initialize all weights to zero.
+
+    X_ones = add_ones(X)
+    s = X_ones.shape
+    m = s[0] #number of rows in X_ones
+    n = s[1] #number of columns in X_ones
+    w = np.zeros((n), dtype = float) # vector with n rows
+
     # 2. During each epoch, update the weights once per example.
-    # 3. Append the cost after each epoch and check for convergence.
+    costs = [0]
+    for i in range(tmax):
+
+        for j in range(m):
+            x_i = X_ones[j]
+            y_i = y[j]
+            w = w - alpha * (np.matmul(w,x_i) - y_i) * x_i
+
+        # 3. Append the cost after each epoch and check for convergence.
+        c = cost(X, y, w)
+        diff = abs((costs[-1]) - c)
+
+        if diff < eps:
+            costs.append(c)
+            return w, costs, i
+            
+        costs.append(c)
+                
+
     # 4. Return the final weights, cost history, and completed epoch count.
-    raise NotImplementedError
+    return w, costs, tmax
+    
+    

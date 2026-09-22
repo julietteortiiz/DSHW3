@@ -7,6 +7,9 @@ Name: Juliette Ortiz
 Report the weights found for `sea_ice_data.csv` and `regression_train.csv`.
 How closely do they agree with the linear models supplied in HW02?
 
+Sea Ice Data ->  w: [ 1.90503822e+02 -9.22444610e-02]
+Regression Train -> w: [ 2.44640709 -2.81635359]
+
 ### Part 3: Stochastic gradient descent
 
 Record the settings and results from the normalized USA Housing experiment.
