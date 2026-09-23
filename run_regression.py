@@ -85,9 +85,9 @@ def main() -> None:
     print(f"analytic cost: {analytic_cost}")
     print(f"analytic weights: {analytic_weights}")
 
-    alpha = 0.001
+    alpha = 0.0001
     eps = 1e-10
-    tmax = 10_000
+    tmax = 100
 
     # TODO: Tune these values for the normalized housing data.
     sgd_weights, cost_history, completed_epochs = fit_SGD_with_history(

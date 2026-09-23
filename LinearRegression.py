@@ -47,8 +47,6 @@ def fit_SGD(
     epochs. One loop over epochs and one nested loop over examples are allowed.
     """
     weights, _, _ = fit_SGD_with_history(X, y, alpha, eps, tmax)
-    print("final weights: " + str(weights))
-    print("should be [1.25, -0.75]")
     return weights
 
 
